@@ -1,0 +1,46 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# system or IDE generated files
+__debug_bin
+.vscode/
+.idea/
+.DS_Store
+*.bak
+.commit.txt
+
+# project output files
+site/
+output/
+logs
+*.log
+*.pcap
+.coverage
+reports
+results
+*.xml
+htmlcov/
+screenshots/
+
+# built plugins
+debugtalk.bin
+debugtalk.so
+
+# python files
+.venv
+__pycache__
+*.pyc
+dist
+*.egg-info
+.python-version
+.pytest_cache
