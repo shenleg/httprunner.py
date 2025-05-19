@@ -1,4 +1,5 @@
 import os
+import shutil
 import string
 import subprocess
 import sys
@@ -551,7 +552,8 @@ def main_make(tests_paths: List[Text], output_dir: Text = None) -> List[Text]:
         if not os.path.isabs(output_dir):
             output_dir = os.path.join(os.getcwd(), output_dir)
         
-        if not os.path.exists(output_dir):
+        if os.path.exists(output_dir):
+            shutil.rmtree(output_dir)
             os.makedirs(output_dir)
 
     for tests_path in tests_paths:
