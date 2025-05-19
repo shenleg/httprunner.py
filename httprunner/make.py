@@ -375,7 +375,7 @@ def make_testcase(testcase: Dict, dir_path: Text = None) -> Text:
         return testcase_python_abs_path
 
     config = testcase["config"]
-    config["path"] = convert_relative_project_root_dir(testcase_python_abs_path)
+    config["path"] = testcase_abs_path
     config["variables"] = convert_variables(
         config.get("variables", {}), testcase_abs_path
     )
@@ -467,12 +467,13 @@ sys.path.insert(0, str(Path(__file__){parent}))
     return testcase_python_abs_path
 
 
-def __make(tests_path: Text):
+def __make(tests_path: Text, output_dir: Text = None):
     """make testcase(s) with testcase/folder absolute path
         generated pytest file path will be cached in pytest_files_made_cache_mapping
 
     Args:
         tests_path: should be in absolute path
+        output_dir: directory to save generated pytest files
 
     """
     logger.info(f"make path: {tests_path}")
@@ -528,7 +529,7 @@ def __make(tests_path: Text):
 
         # testcase
         try:
-            testcase_pytest_path = make_testcase(test_content)
+            testcase_pytest_path = make_testcase(test_content, output_dir)
             pytest_files_run_set.add(testcase_pytest_path)
         except exceptions.TestCaseFormatError as ex:
             logger.warning(
@@ -537,11 +538,21 @@ def __make(tests_path: Text):
             continue
 
 
-def main_make(tests_paths: List[Text]) -> List[Text]:
+
+def main_make(tests_paths: List[Text], output_dir: Text = None) -> List[Text]:
     if not tests_paths:
         return []
 
     ga4_client.send_event("hmake")
+
+    # 确保输出目录存在
+    if output_dir:
+        output_dir = ensure_path_sep(output_dir)
+        if not os.path.isabs(output_dir):
+            output_dir = os.path.join(os.getcwd(), output_dir)
+        
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
 
     for tests_path in tests_paths:
         tests_path = ensure_path_sep(tests_path)
@@ -549,7 +560,7 @@ def main_make(tests_paths: List[Text]) -> List[Text]:
             tests_path = os.path.join(os.getcwd(), tests_path)
 
         try:
-            __make(tests_path)
+            __make(tests_path, output_dir)
         except exceptions.MyBaseError as ex:
             logger.error(ex)
             sys.exit(1)
@@ -569,6 +580,11 @@ def init_make_parser(subparsers):
     )
     parser.add_argument(
         "testcase_path", nargs="*", help="Specify YAML/JSON testcase file/folder path"
+    )
+    parser.add_argument(
+        "--output-dir", "-o", 
+        dest="output_dir",
+        help="Specify output directory for generated pytest files"
     )
 
     return parser

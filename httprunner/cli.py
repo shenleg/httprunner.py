@@ -117,7 +117,7 @@ def main():
     if sys.argv[1] == "run":
         sys.exit(main_run(extra_args))
     elif sys.argv[1] == "make":
-        main_make(args.testcase_path)
+        main_make(args.testcase_path, args.output_dir)
 
 
 def main_hrun_alias():

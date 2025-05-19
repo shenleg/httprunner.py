@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "httprunner"
-version = "v4.3.5"
+version = "v4.3.5.1"
 description = "One-stop solution for HTTP(S) testing."
 license = "Apache-2.0"
 readme = "README.md"
@@ -56,7 +56,7 @@ urllib3 = "^1.26"
 allure = ["allure-pytest"]                  # pip install "httprunner[allure]", poetry install -E allure
 upload = ["requests-toolbelt", "filetype"]  # pip install "httprunner[upload]", poetry install -E upload
 sql = ["sqlalchemy","pymysql"]              # pip install "httprunner[sql]", poetry install -E sql
-thrift = ["cython","thrift","thriftpy2"]    # pip install "httprunner[thrift]", poetry install -E sql
+thrift = ["cython","thrift","thriftpy2"]    # pip install "httprunner[thrift]", poetry install -E thrift
 
 [tool.poetry.dev-dependencies]
 coverage = "^4.5.4"
