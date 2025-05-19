@@ -392,7 +392,8 @@ def load_project_meta(test_path: Text, reload: bool = False) -> ProjectMeta:
     # NOTICE:
     # environment variable maybe loaded in debugtalk.py
     # thus .env file should be loaded before loading debugtalk.py
-    dot_env_path = os.path.join(project_root_directory, ".env")
+    env_file = ".env" if os.getenv("ENV") is None else ".env.{}".format(os.getenv("ENV"))
+    dot_env_path = os.path.join(project_root_directory, "config", env_file)
     dot_env = load_dot_env_file(dot_env_path)
     if dot_env:
         project_meta.env = dot_env
