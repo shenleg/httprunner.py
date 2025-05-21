@@ -224,7 +224,7 @@ class SessionRunner(object):
             f"Start to run testcase: {self.__config.name}, TestCase ID: {self.case_id}"
         )
 
-        logger.add(self.__log_path, format=LOGGER_FORMAT, level="DEBUG")
+        logger.add(self.__log_path, format=LOGGER_FORMAT, level="DEBUG", encoding="utf-8")
         self.__start_at = time.time()
         try:
             # run step in sequential order
