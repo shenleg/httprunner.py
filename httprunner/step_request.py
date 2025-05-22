@@ -162,7 +162,7 @@ def run_step_request(runner: HttpRunner, step: TStep) -> StepResult:
     if step.teardown_hooks:
         call_hooks(runner, step.teardown_hooks, step_variables, "teardown request")
 
-    # extract
+    # extract 变量提取
     extractors = step.extract
     extract_mapping = resp_obj.extract(extractors, step_variables)
     step_result.export_vars = extract_mapping
@@ -356,10 +356,11 @@ class StepRequestExtraction(IStep):
         self.__step.extract[var_name] = jmes_path
         return self
 
-    # def with_regex(self):
-    #     # TODO: extract response html with regex
-    #     pass
-    #
+    def with_regex(self, regex_pattern: Text, var_name: Text) -> "StepRequestExtraction":
+        # 使用特殊前缀标记这是正则表达式
+        self.__step.extract[var_name] = f"regex:{regex_pattern}"
+        return self
+
     # def with_jsonpath(self):
     #     # TODO: extract response json with jsonpath
     #     pass

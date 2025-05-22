@@ -137,19 +137,49 @@ class ResponseObjectBase(object):
         extractors: Dict[Text, Text],
         variables_mapping: VariablesMapping = None,
     ) -> Dict[Text, Any]:
+        """
+        解析提取变量列表，返回解析结果
+        :param extractors: 提取变量列表，可以是表达式、变量、函数 e.g. {"token": "headers.token", "uid": "$uid"}
+        :param variables_mapping: 变量映射表
+        :return: 提取结果
+        """
         if not extractors:
             return {}
 
         extract_mapping = {}
         for key, field in extractors.items():
+            # 变量、函数处理，解析值
             if "$" in field:
                 # field contains variable or function
                 field = self.parser.parse_data(field, variables_mapping)
-            field_value = self._search_jmespath(field)
+            # 正则表达式处理
+            if field.startswith("regex:"):
+                regex_pattern = field[6:]  # 去掉"regex:"前缀
+                field_value = self._search_regex(regex_pattern)
+            else:
+                field_value = self._search_jmespath(field)
+
             extract_mapping[key] = field_value
 
         logger.info(f"extract mapping: {extract_mapping}")
         return extract_mapping
+
+    def _search_regex(self, regex_pattern: Text) -> Any:
+        """使用正则表达式从响应中提取数据"""
+        import re
+        # 从响应文本中提取
+        resp_text = self.resp_obj.text
+        match = re.search(regex_pattern, resp_text)
+        if not match:
+            logger.error(
+                f"failed to search with regex\n"
+                f"pattern: {regex_pattern}\n"
+                f"data: {resp_text}"
+            )
+            raise ValueError(f"failed to search with regex: {regex_pattern}")
+        # 如果有分组，返回第一个分组的内容，否则返回整个匹配
+        check_value = match.group(1) if match.groups() else match.group(0)
+        return check_value
 
     def _search_jmespath(self, expr: Text) -> Any:
         try:
@@ -281,13 +311,16 @@ class ResponseObject(ResponseObjectBase):
             "cookies": self.cookies,
             "body": self.body,
         }
+        # 如果expr不是以resp_obj_meta的key开头
         if not expr.startswith(tuple(resp_obj_meta.keys())):
+            # 如果resp_obj_meta中存在expr
             if hasattr(self.resp_obj,expr):
                 return getattr(self.resp_obj,expr)
             else:
                 return expr
 
         try:
+            # 尝试使用jmespath的expr在规定的resp_obj_meta中搜索
             check_value = jmespath.search(expr, resp_obj_meta)
         except JMESPathError as ex:
             logger.error(

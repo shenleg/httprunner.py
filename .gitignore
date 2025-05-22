@@ -44,3 +44,6 @@ dist
 *.egg-info
 .python-version
 .pytest_cache
+
+# other
+test_case_pytest/

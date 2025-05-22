@@ -93,7 +93,9 @@ def _convert_extractors(extractors: Union[List, Dict]) -> Dict:
         sys.exit(1)
 
     for k, v in v3_extractors.items():
-        v3_extractors[k] = _convert_jmespath(v)
+        # 如果已经是正则格式，不做转换
+        if not v.startswith("regex:"):
+            v3_extractors[k] = _convert_jmespath(v)
 
     return v3_extractors
 

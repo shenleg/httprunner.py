@@ -320,7 +320,15 @@ def make_teststep_chain_style(teststep: Dict) -> Text:
         # request step
         step_info += ".extract()"
         for extract_name, extract_path in teststep["extract"].items():
-            step_info += f""".with_jmespath('{extract_path}', '{extract_name}')"""
+            if extract_path.startswith("regex:"):
+                # 处理正则表达式提取
+                regex_pattern = extract_path[6:]  # 去掉"regex:"前缀
+                # 需要特殊处理下字符串字面量作为参数时的情况，避免函数调用报错
+                regex_pattern = regex_pattern.replace("\\", "\\\\").replace("'", "\\'")
+                step_info += f""".with_regex('{regex_pattern}', '{extract_name}')"""
+            else:
+                # 处理JMESPath提取
+                step_info += f""".with_jmespath('{extract_path}', '{extract_name}')"""
 
     if "export" in teststep:
         # reference testcase step
@@ -551,7 +559,7 @@ def main_make(tests_paths: List[Text], output_dir: Text = None) -> List[Text]:
         output_dir = ensure_path_sep(output_dir)
         if not os.path.isabs(output_dir):
             output_dir = os.path.join(os.getcwd(), output_dir)
-        
+
         if os.path.exists(output_dir):
             shutil.rmtree(output_dir)
             os.makedirs(output_dir)
@@ -584,7 +592,7 @@ def init_make_parser(subparsers):
         "testcase_path", nargs="*", help="Specify YAML/JSON testcase file/folder path"
     )
     parser.add_argument(
-        "--output-dir", "-o", 
+        "--output-dir", "-o",
         dest="output_dir",
         help="Specify output directory for generated pytest files"
     )

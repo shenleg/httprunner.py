@@ -35,18 +35,18 @@ class TestMake(unittest.TestCase):
                 ),
             ),
         )
-    
+
     def test_make_testcase_with_outputdir(self):
-        path = ["test_case_yaml/request_with_variables.yml"]
-        output_dir = "test_case_python"
+        path = ["test_case_yaml/test_regex_extract.yml"]
+        output_dir = "test_case_pytest"
         testcase_python_list = main_make(path, output_dir)
         self.assertEqual(
             testcase_python_list[0],
             os.path.join(
                 os.getcwd(),
                 os.path.join(
-                    "test_case_python",
-                    "request_with_variables_test.py",
+                    "test_case_pytest",
+                    "test_regex_extract_test.py",
                 ),
             ),
         )
