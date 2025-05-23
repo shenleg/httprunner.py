@@ -221,6 +221,7 @@ def make_config_chain_style(config: Dict) -> Text:
 
 
 def make_config_skip(config: Dict) -> Optional[Text]:
+    """处理config中的skip字段，返回skip的reason"""
     if config.get("skip") is None:
         return None
     reason: Text = config.get("skip").get("reason")
@@ -228,6 +229,7 @@ def make_config_skip(config: Dict) -> Optional[Text]:
 
 
 def make_config_marks(config: Dict) -> Optional[Text]:
+    """处理config中的marks字段，返回marks的列表"""
     if config.get("marks") is None:
         return None
     marks: List[str] = config["marks"]

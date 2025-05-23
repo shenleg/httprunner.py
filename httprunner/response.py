@@ -50,7 +50,7 @@ def get_uniform_comparator(comparator: Text):
 
 
 def uniform_validator(validator):
-    """unify validator
+    """统一验证结构格式
 
     Args:
         validator (dict): validator maybe in two formats:
@@ -148,7 +148,7 @@ class ResponseObjectBase(object):
 
         extract_mapping = {}
         for key, field in extractors.items():
-            # 变量、函数处理，解析值
+            # 变量、函数处理
             if "$" in field:
                 # field contains variable or function
                 field = self.parser.parse_data(field, variables_mapping)

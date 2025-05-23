@@ -1,0 +1,15 @@
+config:
+  name: "使用函数提取变量"
+  verify: False
+  base_url: "https://httpbin.org"
+
+teststeps:
+  - name: get method
+    request:
+      method: GET
+      url: /get
+    extract:
+      url: ${get_url_from_response($response)}
+    validate:
+      - eq: ["status_code", 200]
+      - eq: [$url, "https://httpbin.org/get"]

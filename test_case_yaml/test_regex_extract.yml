@@ -13,5 +13,6 @@ teststeps:
       # url2: "regex:'url':\\s*'([^']+)'"     # 正则含单引号情况，注意反斜杠要转义
     validate:
       - eq: ["status_code", 200]
+      # 注意：validate会把引用的字符型数值转换为数值型
       - eq: ["$url1", "https://httpbin.org/get"]
       # - eq: ["$url2", "https://httpbin.org/get"]
