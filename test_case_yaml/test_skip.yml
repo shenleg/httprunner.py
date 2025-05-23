@@ -1,0 +1,25 @@
+config:
+  name: "跳过验证"
+  verify: False
+  base_url: "https://httpbin.org"
+  skip:
+    reason: "跳过原因"
+  parameters:
+    user: [test1, test2, test3, test4]
+
+teststeps:
+  - name: get method
+    request:
+      method: GET
+      url: /get
+    validate:
+      - eq: ["status_code", 200]
+
+  - name: post
+    request:
+      method: POST
+      url: http://httpbin.org/post
+      json:
+        username: ${user}
+    validate:
+      - eq: [status_code, 200]

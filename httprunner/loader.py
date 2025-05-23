@@ -42,7 +42,10 @@ def _load_json_file(json_file: Text) -> Dict:
 
 
 def load_test_file(test_file: Text) -> Dict:
-    """load testcase/testsuite file content"""
+    """
+    解析测试用例文件，返回字典
+    :param test_file: 测试用例文件路径，支持YAML/JSON格式
+    """
     if not os.path.isfile(test_file):
         raise exceptions.FileNotFound(f"test file not exists: {test_file}")
 

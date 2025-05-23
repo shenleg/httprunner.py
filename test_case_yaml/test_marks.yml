@@ -1,0 +1,13 @@
+config:
+  name: "标记验证"
+  verify: False
+  base_url: "https://httpbin.org"
+  marks: ["smoke", "uat"]
+
+teststeps:
+  - name: get method
+    request:
+      method: GET
+      url: /get
+    validate:
+      - eq: ["status_code", 200]
