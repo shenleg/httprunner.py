@@ -19,6 +19,7 @@ PS：
     * 支持 pytest 用例 skip 跳过。使用参考 `test_case_yaml/test_skip.yml`
     * 断言支持响应时间，同时日志也增加了打印。使用参考 `test_case_yaml/test_elapsed_assert.yml`
     * 支持控制台和文件的日志输出级别控制。参考 `config/.env.example`
+    * 去掉了 ga4，不知道有什么用，一直报错看到就烦
 
 # todo
 1. yaml中支持测试用例级别标记，报告中展示、筛选
