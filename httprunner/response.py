@@ -221,6 +221,7 @@ class ResponseObjectBase(object):
             if "$" in check_item:
                 # check_item is variable or function
                 check_item = self.parser.parse_data(check_item, variables_mapping)
+                # 引用值会进行一次转换：字符串 -> 整数，转换失败则还是字符串
                 check_item = parse_string_value(check_item)
 
             if check_item and isinstance(check_item, Text):
@@ -307,6 +308,7 @@ class ResponseObject(ResponseObjectBase):
     def _search_jmespath(self, expr: Text) -> Any:
         resp_obj_meta = {
             "status_code": self.status_code,
+            "elapsed": self.resp_obj.elapsed.total_seconds(),
             "headers": self.headers,
             "cookies": self.cookies,
             "body": self.body,

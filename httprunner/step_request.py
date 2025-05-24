@@ -140,6 +140,7 @@ def run_step_request(runner: HttpRunner, step: TStep) -> StepResult:
     # log response
     response_print = "====== response details ======\n"
     response_print += f"status_code: {resp.status_code}\n"
+    response_print += f"elapsed: {resp.elapsed.total_seconds()}s\n"
     response_print += f"headers: {pretty_format(resp.headers)}\n"
 
     try:

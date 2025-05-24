@@ -1,0 +1,14 @@
+config:
+  name: "对响应时间断言"
+  verify: False
+  base_url: "https://httpbin.org"
+
+teststeps:
+  - name: get method
+    request:
+      method: GET
+      url: /get
+    extract:
+      url: ${get_url_from_response($response)}
+    validate:
+      - lt: [elapsed, 5]
