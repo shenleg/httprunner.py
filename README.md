@@ -13,11 +13,12 @@ PS：
     * 修复 `v4.3.5.1` 的问题，现在会先把目录清空再重新生成，避免旧文件影响
     * 修复日志中文乱码
 3. `v4.3.5.3`
-    * 支持从响应文本中使用正则表达式提取变量了，使用参考 `test_case_yaml\test_regex_extract.yml`
+    * 支持从响应文本中使用正则表达式提取变量了，使用参考 `test_case_yaml/test_regex_extract.yml`
 4. `v4.3.5.4`
-    * 支持 pytest 用例 marks 标记。使用参考 `test_case_yaml\test_marks.yml`
-    * 支持 pytest 用例 skip 跳过。使用参考 `test_case_yaml\test_skip.yml`
-    * 断言支持响应时间，同时日志也增加了打印。使用参考 `test_case_yaml\test_elapsed_assert.yml`
+    * 支持 pytest 用例 marks 标记。使用参考 `test_case_yaml/test_marks.yml`
+    * 支持 pytest 用例 skip 跳过。使用参考 `test_case_yaml/test_skip.yml`
+    * 断言支持响应时间，同时日志也增加了打印。使用参考 `test_case_yaml/test_elapsed_assert.yml`
+    * 支持控制台和文件的日志输出级别控制。参考 `config/.env.example`
 
 # todo
 1. yaml中支持测试用例级别标记，报告中展示、筛选
@@ -25,4 +26,3 @@ PS：
 3. 异常捕获断言
 4. 自定义断言
 5. ~~对响应体进行复杂逻辑处理，提取值~~  => 实际上 `extract` 就可以直接引用函数，函数参数传 `response` 即可达到效果
-6. 支持关闭控制台输出，太多影响时间了，或者支持输出级别

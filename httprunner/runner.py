@@ -27,7 +27,7 @@ from httprunner.models import (
     VariablesMapping,
 )
 from httprunner.parser import Parser
-from httprunner.utils import LOGGER_FORMAT, merge_variables, ga4_client
+from httprunner.utils import init_file_logger, merge_variables, ga4_client
 
 
 class SessionRunner(object):
@@ -224,7 +224,7 @@ class SessionRunner(object):
             f"Start to run testcase: {self.__config.name}, TestCase ID: {self.case_id}"
         )
 
-        logger.add(self.__log_path, format=LOGGER_FORMAT, level="DEBUG", encoding="utf-8")
+        init_file_logger(self.__log_path)
         self.__start_at = time.time()
         try:
             # run step in sequential order

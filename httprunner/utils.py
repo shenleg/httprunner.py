@@ -10,7 +10,7 @@ import sys
 import time
 import uuid
 from multiprocessing import Queue
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional, Text
 
 import requests
 import sentry_sdk
@@ -130,7 +130,7 @@ def set_os_environ(variables_mapping):
     """set variables mapping to os.environ"""
     for variable in variables_mapping:
         os.environ[variable] = variables_mapping[variable]
-        logger.debug(f"Set OS environment variable: {variable}")
+        logger.debug(f"Set OS environment variable: {variable}={variables_mapping[variable]}")
 
 
 def unset_os_environ(variables_mapping):
@@ -356,11 +356,26 @@ LOGGER_FORMAT = (
 )
 
 
-def init_logger(level: str):
-    level = level.upper()
-    if level not in ["TRACE", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]:
-        level = "INFO"  # default
+def init_stdout_logger(level: Optional[Text] = None):
+    if level:
+        level = level.upper()
+        if level not in ["TRACE", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]:
+            level = "INFO"  # default
+    else:
+        # 默认采用环境变量
+        level = os.getenv("LOGGER_STDOUT_LEVEL", "INFO")
 
-    # set log level to INFO
     logger.remove()
     logger.add(sys.stdout, format=LOGGER_FORMAT, level=level)
+
+def init_file_logger(file_path: str, level: Optional[Text] = None):
+    """追加文件输出位置"""
+    if level:
+        level = level.upper()
+        if level not in ["TRACE", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]:
+            level = "INFO"  # default
+    else:
+        # 默认采用环境变量
+        level = os.getenv("LOGGER_FILE_LEVEL", "INFO")
+
+    logger.add(file_path, format=LOGGER_FORMAT, level=level, encoding="utf-8")

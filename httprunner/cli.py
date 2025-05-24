@@ -9,7 +9,7 @@ from loguru import logger
 from httprunner import __description__, __version__
 from httprunner.compat import ensure_cli_args
 from httprunner.make import init_make_parser, main_make
-from httprunner.utils import ga4_client, init_logger, init_sentry_sdk
+from httprunner.utils import ga4_client, init_stdout_logger, init_sentry_sdk
 
 init_sentry_sdk()
 
@@ -112,7 +112,7 @@ def main():
     except ValueError:
         level = "INFO"  # default
 
-    init_logger(level)
+    init_stdout_logger(level)
 
     if sys.argv[1] == "run":
         sys.exit(main_run(extra_args))
