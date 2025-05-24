@@ -104,7 +104,6 @@ def load_dot_env_file(dot_env_path: Text) -> Dict:
     if not os.path.isfile(dot_env_path):
         return {}
 
-    logger.info(f"Loading environment variables from {dot_env_path}")
     env_variables_mapping = {}
 
     with open(dot_env_path, mode="rb") as fp:
@@ -124,6 +123,10 @@ def load_dot_env_file(dot_env_path: Text) -> Dict:
                 variable.strip().decode("utf-8")
             ] = value.strip().decode("utf-8")
 
+    if os.getenv("ENV_LOADED"):
+        return env_variables_mapping
+
+    logger.info(f"Loading environment variables from {dot_env_path}")
     utils.set_os_environ(env_variables_mapping)
     return env_variables_mapping
 

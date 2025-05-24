@@ -46,6 +46,8 @@ base_path = os.getcwd()
 env_file = ".env" if os.getenv("ENV") is None else ".env.{}".format(os.getenv("ENV"))
 dot_env_path = os.path.join(base_path, "config", env_file)
 dot_env = load_dot_env_file(dot_env_path)
+if dot_env:
+    os.environ["ENV_LOADED"] = "True"
 
 # 初始化日志记录器
 init_stdout_logger()
